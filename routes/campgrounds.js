@@ -4,7 +4,7 @@ const cathAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
 const Campground = require('../models/campground')
 const { campgroundSchema } = require('../schema.js');
-
+//const flash = require('connect-flash');
 
 const validateCampground = (req, res, next) => {
     const { error } = campgroundSchema.validate(req.body);
@@ -31,18 +31,26 @@ router.post('/', validateCampground ,cathAsync(async (req, res, next)=>{
         if(!req.body.campground) throw new ExpressError('Invalid campgroud data', 400);
         const campground =  new Campground(req.body.campground);
         await campground.save();
+        req.flash('success', 'Successfully made a new campground!');
         res.redirect(`/campgrounds/${campground._id}`);
-        console.log(req.body);
 }));
 
 router.get('/:id', cathAsync(async (req, res)=>{
     const campground = await Campground.findById(req.params.id).populate('reviews');
+    if (!campground) {
+        req.flash('error', 'Cannot find that campground!');
+        return res.redirect('/campgrounds');
+    }
     res.render('campgrounds/show', {campground});
 }));
 
 router.get('/:id/edit', cathAsync(
     async (req, res)=>{
         const campground = await Campground.findById(req.params.id);
+        if (!campground) {
+            req.flash('error', 'Cannot find that campground!');
+            return res.redirect('/campgrounds');
+        }
         res.render('campgrounds/edit', {campground});
     }
 ));
@@ -51,6 +59,7 @@ router.put('/:id', validateCampground ,cathAsync(
     async (req, res)=>{
         const { id } = req.params
         const campground =  await Campground.findByIdAndUpdate(id, {...req.body.campground});
+        req.flash('success', 'successfully updated campground')
         res.redirect(`/campgrounds/${campground._id}`);
     }
 ));
