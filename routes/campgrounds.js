@@ -7,7 +7,7 @@ const campgroud = require('../controllers/campground')
 
 router.get('/', cathAsync(campgroud.index));
 
-router.get('/new', isLoggedIn , campgroud.renderNewForm;
+router.get('/new', isLoggedIn , campgroud.renderNewForm);
 
 router.post('/', isLoggedIn ,validateCampground ,cathAsync(campgroud.createCampground));
 

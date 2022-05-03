@@ -9,4 +9,4 @@ router.post('/', isLoggedIn ,validateReview ,cathAsync(Review.createReview));
 
 router.delete('/:reviewId',isLoggedIn ,isReviewAuthor , cathAsync(Review.deleteReview));
 
-module.exports = router
+module.exports = router;
