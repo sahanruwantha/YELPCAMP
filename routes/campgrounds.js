@@ -17,6 +17,6 @@ router.get('/:id/edit',isLoggedIn , isAuthor ,cathAsync(campgroud.renderEditForm
 
 router.put('/:id', isLoggedIn , isAuthor, validateCampground ,cathAsync(campgroud.updateCampground));
 
-router.delete('/:id',isLoggedIn , cathAsync(campgroud.deleteCampground()));
+router.delete('/:id',isLoggedIn , cathAsync(campgroud.deleteCampground));
 
 module.exports = router;

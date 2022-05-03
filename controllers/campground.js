@@ -1,5 +1,7 @@
 
 const Campground = require('../models/campground');
+const ExpressError = require('../utils/ExpressError');
+
 
 module.exports.index = async (req, res) => {
     const campgrounds = await Campground.find({})
@@ -53,5 +55,6 @@ module.exports.updateCampground = async (req, res)=>{
 
 module.exports.deleteCampground =  async (req, res)=>{
     await Campground.findByIdAndDelete(req.params.id);
-    res.redirect('/campgrounds/');
+    req.flash('success', 'Successfully deleted campground')
+    res.redirect('/campgrounds');
 }
