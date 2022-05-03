@@ -5,18 +5,23 @@ const { isLoggedIn, isAuthor, validateCampground } = require('../middleware');
 const campgroud = require('../controllers/campground')
 
 
-router.get('/', cathAsync(campgroud.index));
-
+router.route('/')
+    .get( cathAsync(campgroud.index))
+    .post(isLoggedIn ,validateCampground ,cathAsync(campgroud.createCampground));
+    
 router.get('/new', isLoggedIn , campgroud.renderNewForm);
+    
+    
+    
+router.route('/:id')
+    .get(cathAsync(campgroud.showCampground))
+    .put(isLoggedIn , isAuthor, validateCampground ,cathAsync(campgroud.updateCampground))
+    .delete(isLoggedIn , cathAsync(campgroud.deleteCampground));
 
-router.post('/', isLoggedIn ,validateCampground ,cathAsync(campgroud.createCampground));
 
-router.get('/:id',cathAsync(campgroud.showCampground));
 
 router.get('/:id/edit',isLoggedIn , isAuthor ,cathAsync(campgroud.renderEditForm));
 
-router.put('/:id', isLoggedIn , isAuthor, validateCampground ,cathAsync(campgroud.updateCampground));
 
-router.delete('/:id',isLoggedIn , cathAsync(campgroud.deleteCampground));
 
 module.exports = router;
