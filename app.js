@@ -9,6 +9,7 @@ const flash = require('connect-flash');
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const User = require('./models/user')
+const ExpressError = require('./utils/ExpressError');
 
 
 const campgroundRoutes = require('./routes/campgrounds');
@@ -61,7 +62,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next)=>{
     res.locals.currentUser = req.user
-    console.log(res.locals)
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
